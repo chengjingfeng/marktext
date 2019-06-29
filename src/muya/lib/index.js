@@ -74,9 +74,13 @@ class Muya {
             if (hasTable) {
               console.warn('There was a problem with the table deletion.')
             }
-            const lineRemovedUnExpected = Array.from(removedNodes).some(node => node.nodeType === 1 && node.classList.contains('ag-paragraph-content'))
+            // Fix me @jocs
+            // Fix bug on some IOS devices(iPhone, iPad, iPod, etc) and safari browser it will remove the paragraph-content span before
+            // compositionend event. So we add a re-render after it removed this element and do not blur editor.
+            // It's not a good solution, but I didn't not find a better one.
+            const lineRemovedUnexpected = Array.from(removedNodes).some(node => node.nodeType === 1 && node.classList.contains('ag-paragraph-content'))
               && this.keyboard.isComposed
-            if (lineRemovedUnExpected) {
+            if (lineRemovedUnexpected) {
               this.contentState.partialRender()
             }
           }
